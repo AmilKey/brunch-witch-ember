@@ -1,0 +1,57 @@
+
+window.Todos = require('Todos');
+
+//////////////////////////////////
+// Templates
+//////////////////////////////////
+
+require('templates/todos');
+require('templates/todosindex');
+
+//////////////////////////////////
+// Models
+//////////////////////////////////
+
+require('models/todo');
+
+/////////////////////////////////
+// Controllers
+/////////////////////////////////
+
+require('controlles/todo_controller');
+require('controlles/todos_controller');
+
+/////////////////////////////////
+// Views
+/////////////////////////////////
+
+require('views/edit_todo_view');
+
+/////////////////////////////////
+// Routes
+/////////////////////////////////
+
+require('routes/ActiveRoute');
+require('routes/CompletedRoute');
+require('routes/IndexRoute');
+require('routes/TodosRoute');
+
+/////////////////////////////////
+// Store
+/////////////////////////////////
+
+
+/////////////////////////////////
+// Router
+/////////////////////////////////
+
+
+Todos.Router.map(function () {
+    this.resource('todos', { path: '/' },function () {
+        // additional child routes
+        this.route('active');
+        this.route('completed');
+    });
+});
+
+Todos.initialize();
