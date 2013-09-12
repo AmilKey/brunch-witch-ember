@@ -1,43 +1,62 @@
-fs      = require 'fs'
 sysPath = require 'path'
+fs      = require 'fs'
 
-# See docs at http://brunch.readthedocs.org/en/latest/config.html.
+#TODO: find a method to do this in a cleaner way
+gitHead = -> fs.readFileSync(sysPath.join('.git', 'HEAD')).toString().replace(/^\s*ref\:\s*/g, '').replace(/\s*$/g, '')
+gitBranch = ->
+  head = gitHead().split /\//g
+  branch = head.slice()
+  branch.shift()
+  branch.shift()
+  branch.join '/'
+gitCommitHash = -> fs.readFileSync(sysPath.join('.git', gitHead().split(/\//g).join(sysPath.sep))).toString().replace(/^\s*/g, '').replace(/\s*$/g, '')
 
-exports.config = 
-
-  files: 
-    
-    javascripts: 
-      defaultExtension: 'js',
-      joinTo: 
+exports.config =
+  # See http://brunch.io/#documentation for documentation.
+  files:
+    javascripts:
+      joinTo:
         'javascripts/app.js': /^app/
         'javascripts/vendor.js': /^vendor/
+        'test/javascripts/test-vendor.js': /^test(\/|\\)(?=vendor)/
 
-      order: 
+      order:
         before: [
-          'vendor/scripts/console-helper.js',
-          'vendor/scripts/jquery-1.9.0.min.js',
-          'vendor/scripts/handlebars-1.0.rc.2.js',
-          'vendor/scripts/ember-latest.js',
-          'vendor/scripts/ember-data-latest.js',
-          'vendor/scripts/bootstrap.js',
-          'vendor/scripts/localstorage_adapter.js'
+          'vendor/scripts/console-polyfill.js'
+          'vendor/scripts/jquery-1.9.1.js'
+          'vendor/scripts/handlebars-1.0.0.js'
+          'vendor/scripts/ember-latest.js'
+          'vendor/scripts/ember-data-latest.js'
+          'vendor/scripts/bootstrap/bootstrap-tooltip.js'
           ]
+        after: [
+          'vendor/scripts/ember-bootstrap-latest.js'
+        ]
 
     stylesheets:
-      defaultExtension: 'css'
-      joinTo: 'stylesheets/app.css'
+      joinTo:
+        'stylesheets/app.css': /^(app|vendor)/
       order:
-        before: ['vendor/styles/bootstrap.css']
+        before: ['vendor/styles/normalize.css']
 
     templates:
-      precompile: true
+      # for smaller builds, disable the pre-compilation of tempaltes
+      precompile: false
       root: 'templates'
-      defaultExtension: 'hbs'
       joinTo: 'javascripts/app.js' : /^app/
 
-  modules:
-    addSourceURLs: true
+      modules:
+        addSourceURLs: true
+
+  # CoffeeScript easy-debugging | don't forget to remove for production release
+  sourceMaps: true
+
+  # keyword-brunch plugin
+  keyword:
+    map:
+      git_commit_hash: gitCommitHash
+      git_short_commit_hash: -> gitCommitHash().substr 0, 7
+      git_branch: gitBranch
 
   # allow _ prefixed templates so partials work
   conventions:
@@ -49,9 +68,3 @@ exports.config =
         false
       else
         startsWith sysPath.basename(path), '_'
-
-  server:
-    port: 3333
-    base: '/'
-    run: no
-

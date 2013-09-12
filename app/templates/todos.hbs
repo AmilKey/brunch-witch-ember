@@ -2,8 +2,7 @@
 	
         <header id="header">
             <h1>todos</h1>
-            {{input type="text" id="new-todo" placeholder="What needs to be done?"
-            value=newTitle action="createTodo"}}
+            {{input type="text" id="new-todo" placeholder="What needs to be done?" value=newTitle action="createTodo"}}
         </header>
 
         <section id="main">
@@ -16,16 +15,16 @@
         <span id="todo-count">
            <strong>{{remaining}}</strong> {{inflection}} left </span>
             <ul id="filters">
-                <li>
-                    {{#link-to "todos.index" activeClass="selected"}}All{{/link-to}}
+              <li>
+                    {{#linkTo "todos.index" activeClass="selected"}}All{{/linkTo}}
                 </li>
                 <li>
-                    {{#link-to "todos.active" activeClass="selected"}}Active{{/link-to}}
+                    {{#linkTo "todos.active" activeClass="selected"}}Active{{/linkTo}}
                 </li>
                 <li>
-                    {{#link-to "todos.completed" activeClass="selected"}}Completed{{/link-to}}
-                </li>
-            </ul>
+                    {{#linkTo "todos.completed" activeClass="selected"}}Completed{{/linkTo}}
+                </li>  
+            </ul> 
 
             {{#if hasCompleted}}
             <button id="clear-completed" {{action "clearCompleted"}}>

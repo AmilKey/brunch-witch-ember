@@ -1,12 +1,13 @@
-
-window.Todos = require('Todos');
+///// ===== Namespace =====
+///////
+App = require ('todos');
 
 //////////////////////////////////
 // Templates
 //////////////////////////////////
-
+require ('templates/application');
 require('templates/todos');
-require('templates/todosindex');
+require('templates/todos/index');
 
 //////////////////////////////////
 // Models
@@ -18,8 +19,8 @@ require('models/todo');
 // Controllers
 /////////////////////////////////
 
-require('controlles/todo_controller');
-require('controlles/todos_controller');
+require('controllers/todo_controller');
+require('controllers/todos_controller');
 
 /////////////////////////////////
 // Views
@@ -40,18 +41,11 @@ require('routes/TodosRoute');
 // Store
 /////////////////////////////////
 
+require('store');
 
 /////////////////////////////////
 // Router
 /////////////////////////////////
 
+require ('router');
 
-Todos.Router.map(function () {
-    this.resource('todos', { path: '/' },function () {
-        // additional child routes
-        this.route('active');
-        this.route('completed');
-    });
-});
-
-Todos.initialize();
